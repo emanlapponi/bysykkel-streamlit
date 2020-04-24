@@ -38,7 +38,7 @@ def get_status(station_status, station_id):
 def main():
     st.markdown("# 🚲 bysykkel-streamlit")
     st.markdown(
-        "> You can use this app to see how many bikes ( 🚲) and docks ( 🏠) are available at your station of choice"
+        "> See how many bikes ( 🚲) and docks ( 🏠) are available at your station of choice"
     )
 
     station_info = request(INFORMATION)
@@ -60,7 +60,10 @@ def main():
         if station_status.status_code != 200:
             st.error("Service unavailable 😭")
         else:
-            n_bikes, n_docks, timestamp = get_status(station_status, stations[station_key]['station_id'])
+            n_bikes, n_docks, timestamp = get_status(
+                station_status,
+                stations[station_key]['station_id'],
+            )
             if n_bikes < 0:
                 st.error(f"Could not find station: {station_key}")
             bikes = "🚲 " * n_bikes if n_bikes > 0 else "😩"
