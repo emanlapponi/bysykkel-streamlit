@@ -5,14 +5,14 @@ import streamlit as st
 from datetime import datetime
 
 
-IDENTIFIER= 'eman-bysykkel-streamlit'
+IDENTIFIER= "eman-bysykkel-streamlit"
 API_URL = "https://gbfs.urbansharing.com/oslobysykkel.no"
 INFORMATION = "station_information.json"
 STATUS = "station_status.json"
 
 
 def headers():
-    return {'Client-Identifier': IDENTIFIER}
+    return {"Client-Identifier": IDENTIFIER}
 
 
 def request(level):
@@ -25,11 +25,11 @@ def get_stations(station_info, key):
 
 
 def get_status(station_status, station_id):
-    for station in station_status.json()['data']['stations']:
-        if station['station_id'] == station_id:
+    for station in station_status.json()["data"]["stations"]:
+        if station["station_id"] == station_id:
             return (
                 station["num_bikes_available"],
-                station["num_bikes_available"],
+                station["num_docks_available"],
                 station["last_reported"],
             )
     return -1, -1, -1
@@ -46,14 +46,14 @@ def main():
     if station_info.status_code != 200:
         st.error("Service unavailable 😭")
 
-    mode = st.radio('Search by:', ['Station Name', 'Station Address'])
+    mode = st.radio("Search by:", ["Station Name", "Station Address"])
 
-    if mode == 'Station Name':
-        stations = get_stations(station_info, 'name')
-    elif mode == 'Station Address':
-        stations = get_stations(station_info, 'address')
+    if mode == "Station Name":
+        stations = get_stations(station_info, "name")
+    elif mode == "Station Address":
+        stations = get_stations(station_info, "address")
 
-    station_key = st.selectbox("Browse or search stations:", [''] + list(stations.keys()))
+    station_key = st.selectbox("Browse or search stations:", [""] + list(stations.keys()))
 
     if station_key:
         station_status = request(STATUS)
@@ -62,7 +62,7 @@ def main():
         else:
             n_bikes, n_docks, timestamp = get_status(
                 station_status,
-                stations[station_key]['station_id'],
+                stations[station_key]["station_id"],
             )
             if n_bikes < 0:
                 st.error(f"Could not find station: {station_key}")
