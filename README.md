@@ -7,7 +7,7 @@ A Streamlit app to check for available public bikes and docks in Oslo.
 Assuming a working python 3.7 and pipenv installation:
 
 ```
-git clone https://github.com/convertelligence/bysykkel-streamlit.git
+git clone https://github.com/emanlapponi/bysykkel-streamlit.git
 cd bysykkel-streamlit
 pipenv shell
 pipenv install
