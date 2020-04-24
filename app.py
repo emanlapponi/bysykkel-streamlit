@@ -61,8 +61,8 @@ def main():
             st.error("Service unavailable 😭")
         else:
             n_bikes, n_docks, timestamp = get_status(station_status, stations[station_key]['station_id'])
-            bikes = "🚲 " * n_bikes if n_bikes > 0 else "0️⃣ 😩"
-            docks = "🏠 " * n_docks if n_docks > 0 else "0️⃣ 😭"
+            bikes = "🚲 " * n_bikes if n_bikes > 0 else "😩"
+            docks = "🏠 " * n_docks if n_docks > 0 else "😭"
         st.markdown(f"### Available **bikes**: {n_bikes}\n # {bikes}")
         st.markdown(f"### Available **docks**: {n_docks}\n # {docks}")
         st.markdown(f"last updated: {datetime.fromtimestamp(timestamp)}")
