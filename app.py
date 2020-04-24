@@ -32,7 +32,7 @@ def get_status(station_status, station_id):
                 station["num_bikes_available"],
                 station["last_reported"],
             )
-    return -1, -1
+    return -1, -1, -1
 
 
 def main():
@@ -61,11 +61,13 @@ def main():
             st.error("Service unavailable 😭")
         else:
             n_bikes, n_docks, timestamp = get_status(station_status, stations[station_key]['station_id'])
+            if n_bikes < 0:
+                st.error(f"Could not find station: {station_key}")
             bikes = "🚲 " * n_bikes if n_bikes > 0 else "😩"
             docks = "🏠 " * n_docks if n_docks > 0 else "😭"
-        st.markdown(f"### Available **bikes**: {n_bikes}\n # {bikes}")
-        st.markdown(f"### Available **docks**: {n_docks}\n # {docks}")
-        st.markdown(f"last updated: {datetime.fromtimestamp(timestamp)}")
+            st.markdown(f"### Available **bikes**: {n_bikes}\n # {bikes}")
+            st.markdown(f"### Available **docks**: {n_docks}\n # {docks}")
+            st.markdown(f"last updated: {datetime.fromtimestamp(timestamp)}")
 
 
 if __name__ == "__main__":
