@@ -45,32 +45,34 @@ def main():
 
     if station_info.status_code != 200:
         st.error("Service unavailable 😭")
+    else:
+        mode = st.radio("Search by:", ["Station Name", "Station Address"])
 
-    mode = st.radio("Search by:", ["Station Name", "Station Address"])
+        if mode == "Station Name":
+            stations = get_stations(station_info, "name")
+        elif mode == "Station Address":
+            stations = get_stations(station_info, "address")
 
-    if mode == "Station Name":
-        stations = get_stations(station_info, "name")
-    elif mode == "Station Address":
-        stations = get_stations(station_info, "address")
+        station_key = st.selectbox(
+            "Browse or search stations:", [""] + list(stations.keys())
+        )
 
-    station_key = st.selectbox("Browse or search stations:", [""] + list(stations.keys()))
-
-    if station_key:
-        station_status = request(STATUS)
-        if station_status.status_code != 200:
-            st.error("Service unavailable 😭")
-        else:
-            n_bikes, n_docks, timestamp = get_status(
-                station_status,
-                stations[station_key]["station_id"],
-            )
-            if n_bikes < 0:
-                st.error(f"Could not find station: {station_key}")
-            bikes = "🚲 " * n_bikes if n_bikes > 0 else "😩"
-            docks = "🏠 " * n_docks if n_docks > 0 else "😭"
-            st.markdown(f"### Available **bikes**: {n_bikes}\n # {bikes}")
-            st.markdown(f"### Available **docks**: {n_docks}\n # {docks}")
-            st.markdown(f"last updated: {datetime.fromtimestamp(timestamp)}")
+        if station_key:
+            station_status = request(STATUS)
+            if station_status.status_code != 200:
+                st.error("Service unavailable 😭")
+            else:
+                n_bikes, n_docks, timestamp = get_status(
+                    station_status,
+                    stations[station_key]["station_id"],
+                )
+                if n_bikes < 0:
+                    st.error(f"Could not find station: {station_key}")
+                bikes = "🚲 " * n_bikes if n_bikes > 0 else "😩"
+                docks = "🏠 " * n_docks if n_docks > 0 else "😭"
+                st.markdown(f"### Available **bikes**: {n_bikes}\n # {bikes}")
+                st.markdown(f"### Available **docks**: {n_docks}\n # {docks}")
+                st.markdown(f"last updated: {datetime.fromtimestamp(timestamp)}")
 
 
 if __name__ == "__main__":
