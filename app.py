@@ -25,14 +25,16 @@ def get_stations(station_info, key):
 
 
 def get_status(station_status, station_id):
+    bikes, docks, timestamp = -1, -1, -1
     for station in station_status.json()["data"]["stations"]:
         if station["station_id"] == station_id:
-            return (
+            bikes, docks, timestamp = (
                 station["num_bikes_available"],
                 station["num_docks_available"],
                 station["last_reported"],
             )
-    return -1, -1, -1
+            break
+    return bikes, docks, timestamp
 
 
 def main():
